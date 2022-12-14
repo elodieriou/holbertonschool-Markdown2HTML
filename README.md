@@ -3,8 +3,9 @@
 Holberton School
 * Ordered list 1
 * Ordered list 2
+* Ordered list 3
 - My title
-- Second title
+- Second **title**
 ## My title2
 # My title3
 #### My title4
@@ -20,3 +21,5 @@ __Or is bold__
 But it's [[private]]
 
 ((Hello Chicago))
+
+Hello, I leave in ((Chicago))

@@ -7,19 +7,16 @@ import re
 
 if __name__ == "__main__":
 
-    markdownFile = "README.md"
-    htmlFile = "README.html"
-
     if len(argv) <= 2:
         stderr.write("Usage: ./markdown2html.py README.md README.html \n")
         exit(1)
 
-    if not exists(markdownFile):
-        print("Missing {}".format(markdownFile), file=stderr)
+    if not exists(argv[1]):
+        print("Missing {}".format(argv[1]), file=stderr)
         exit(1)
 
-    with open(markdownFile, 'r', encoding='utf-8') as markdown:
-        with open(htmlFile, 'w', encoding='utf-8') as html:
+    with open(argv[1], 'r', encoding='utf-8') as markdown:
+        with open(argv[2], 'w', encoding='utf-8') as html:
 
             isUnorderedOpen, isOrderedOpen = False, False
             numberUnorderedList, numberOrderedList,  = 0, 0
@@ -40,7 +37,8 @@ if __name__ == "__main__":
                 # Converting in MD5
                 findRegex = re.findall(r'\[\[.+?\]\]', line)
                 if findRegex:
-                    line = line.replace(findRegex[0], md5(findRegex[0].encode()).hexdigest())
+                    line = line.replace(findRegex[0],
+                                        md5(findRegex[0].encode()).hexdigest())
 
                 # Removing '(', ')' 'C', 'c'
                 findRegex2 = re.findall(r'\(\(.+?\)\)', line)
