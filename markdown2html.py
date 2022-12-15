@@ -23,7 +23,6 @@ if __name__ == "__main__":
             numberHeading, numberParagraph = 0, 0
 
             index = markdown.readlines()
-            print (index)
             count = 0
 
             for line in index:
@@ -61,9 +60,11 @@ if __name__ == "__main__":
                     elif numberOrderedList > 0 and numberHeading == 0:
                         html.write("</ol>\n")
                         numberOrderedList = 0
+                        isOrderedOpen = False
                     elif numberParagraph > 0 and numberHeading == 0:
                         html.write("</p>\n")
                         numberParagraph = 0
+                        isParagraphOpen = False
 
                     # Create header
                     title = line.lstrip('# ').rstrip("\n")
