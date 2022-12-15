@@ -18,11 +18,12 @@ if __name__ == "__main__":
     with open(argv[1], 'r', encoding='utf-8') as markdown:
         with open(argv[2], 'w', encoding='utf-8') as html:
 
-            isUnorderedOpen, isOrderedOpen = False, False
+            isUnorderedOpen, isOrderedOpen, isParagraphOpen = False, False, False
             numberUnorderedList, numberOrderedList,  = 0, 0
             numberHeading, numberParagraph = 0, 0
 
             index = markdown.readlines()
+            print (index)
             count = 0
 
             for line in index:
@@ -51,27 +52,38 @@ if __name__ == "__main__":
 
                 # Translate Headings Markdown
                 if header > 0:
+
+                    # Check style before
                     if numberUnorderedList > 0 and numberHeading == 0:
                         html.write("</ul>\n")
                         numberUnorderedList = 0
-                    if numberOrderedList > 0 and numberHeading == 0:
+                        isUnorderedOpen = False
+                    elif numberOrderedList > 0 and numberHeading == 0:
                         html.write("</ol>\n")
                         numberOrderedList = 0
-                    if numberParagraph > 0 and numberHeading == 0:
+                    elif numberParagraph > 0 and numberHeading == 0:
                         html.write("</p>\n")
                         numberParagraph = 0
+
+                    # Create header
                     title = line.lstrip('# ').rstrip("\n")
                     html.write("<h{}>{}</h{}>\n".format(header, title, header))
                     numberHeading += 1
 
                 # Translate Unordered List Markdown
-                if unordered == 1:
+                elif unordered == 1:
+
+                    # Check style before
                     if numberOrderedList > 0 and numberUnorderedList == 0:
                         html.write("</ol>\n")
                         numberOrderedList = 0
-                    if numberParagraph > 0 and numberUnorderedList == 0:
+                        isOrderedOpen = False
+                    elif numberParagraph > 0 and numberUnorderedList == 0:
                         html.write("</p>\n")
                         numberParagraph = 0
+                        isParagraphOpen = False
+
+                    # Create unordered list
                     title = line.lstrip('- ').rstrip("\n")
                     if not isUnorderedOpen:
                         html.write("<ul>\n")
@@ -80,15 +92,22 @@ if __name__ == "__main__":
                     numberUnorderedList += 1
                     if count == len(index) and numberUnorderedList > 0:
                         html.write("</ul>\n")
+                        isUnorderedOpen = False
 
                 # Translate Ordered List Markdown
-                if ordered == 1:
+                elif ordered == 1:
+
+                    # Check style before
                     if numberUnorderedList > 0 and numberOrderedList == 0:
                         html.write("</ul>\n")
                         numberUnorderedList = 0
-                    if numberParagraph > 0 and numberOrderedList == 0:
+                        isUnorderedOpen = False
+                    elif numberParagraph > 0 and numberOrderedList == 0:
                         html.write("</p>\n")
                         numberParagraph = 0
+                        isParagraphOpen = False
+
+                    # Create ordered list
                     title = line.lstrip('* ').rstrip("\n")
                     if not isOrderedOpen:
                         html.write("<ol>\n")
@@ -97,17 +116,35 @@ if __name__ == "__main__":
                     numberOrderedList += 1
                     if count == len(index) and numberOrderedList > 0:
                         html.write("</ol>\n")
+                        isOrderedOpen = False
 
                 # Translate Paragraph Markdown
-                if header == 0 and unordered == 0 and ordered == 0:
+                elif header == 0 and unordered == 0 and ordered == 0:
+
+                    # Check style before
+                    if numberUnorderedList > 0 and numberParagraph == 0:
+                        html.write("</ul>\n")
+                        numberUnorderedList = 0
+                        isUnorderedOpen = False
+                    elif numberOrderedList > 0 and numberParagraph == 0:
+                        html.write("</ol>\n")
+                        numberOrderedList = 0
+                        isOrderedOpen = False
+                    if index[count - 1] == "\n" and numberParagraph == 0:
+                        continue
+
+                    # Create paragraph
                     numberParagraph += 1
-                    if index[count - 1] == "\n":
+                    if not isParagraphOpen:
+                        html.write("<p>{}".format(line.rstrip("\n")))
+                        isParagraphOpen = True
+                    elif index[count - 1] == "\n" and numberParagraph > 0:
                         html.write("</p>\n")
                         numberParagraph = 0
+                        isParagraphOpen = False
                     elif numberParagraph > 1:
                         html.write("<br/>{}".format(line.rstrip("\n")))
-                    else:
-                        html.write("<p>{}".format(line.rstrip("\n")))
                     if count == len(index):
                         html.write("</p>\n")
+                        isParagraphOpen = False
     exit(0)
