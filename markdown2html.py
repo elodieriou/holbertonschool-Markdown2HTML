@@ -46,7 +46,8 @@ if __name__ == "__main__":
                         .translate({ord(i): None for i in '[]'})
 
                 # Removing '(', ')' 'C', 'c'
-                findRegex2 = re.findall(r'\(\(.+?\)\)', line)
+                findRegex2 = re.findall(r'\(\((.+?)\)\)', line)
+                print(findRegex2)
                 if findRegex2:
                     line = line.translate({ord(i): None for i in '()Cc'})
 
