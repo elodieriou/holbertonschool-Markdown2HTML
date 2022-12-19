@@ -7,7 +7,7 @@ import re
 
 if __name__ == "__main__":
 
-    if len(argv) < 3:
+    if len(argv) <= 3:
         print("Usage: ./markdown2html.py README.md README.html \n", file=stderr, end="")
         exit(1)
 
