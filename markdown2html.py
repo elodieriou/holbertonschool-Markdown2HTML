@@ -8,7 +8,8 @@ import re
 if __name__ == "__main__":
 
     if len(argv) <= 2:
-        print("Usage: ./markdown2html.py README.md README.html \n", file=stderr)
+        print("Usage: ./markdown2html.py README.md README.html \n",
+              file=stderr, end="")
         exit(1)
 
     if not exists(argv[1]):
@@ -18,7 +19,8 @@ if __name__ == "__main__":
     with open(argv[1], 'r', encoding='utf-8') as markdown:
         with open(argv[2], 'w', encoding='utf-8') as html:
 
-            isUnorderedOpen, isOrderedOpen, isParagraphOpen = False, False, False
+            isUnorderedOpen, isOrderedOpen,  = False, False
+            isParagraphOpen = False
             numberUnorderedList, numberOrderedList,  = 0, 0
             numberHeading, numberParagraph = 0, 0
 
