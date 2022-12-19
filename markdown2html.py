@@ -38,10 +38,12 @@ if __name__ == "__main__":
                 line = line.replace("__", "</em>", 1)
 
                 # Converting in MD5
-                findRegex = re.findall(r'\[\[.+?\]\]', line)
+                findRegex = re.findall(r'\[\[(.+?)\]\]', line)
+                print(findRegex)
                 if findRegex:
                     line = line.replace(findRegex[0],
-                                        md5(findRegex[0].encode()).hexdigest())
+                                        md5(findRegex[0].encode()).hexdigest())\
+                        .translate({ord(i): None for i in '[]'})
 
                 # Removing '(', ')' 'C', 'c'
                 findRegex2 = re.findall(r'\(\(.+?\)\)', line)
