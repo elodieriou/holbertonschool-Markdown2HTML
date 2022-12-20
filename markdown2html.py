@@ -42,8 +42,8 @@ if __name__ == "__main__":
                 for group in range(0, len(findRegex)):
                     line = line.translate({ord(i): None for i in '[]'})
                     if line != "\n":
-                        md5 = md5(findRegex[group].encode()).hexdigest()
-                        line = line.replace(findRegex[group], md5)
+                        convert = md5(findRegex[group].encode()).hexdigest()
+                        line = line.replace(findRegex[group], convert)
 
                 # Removing '(', ')' 'C', 'c'
                 findRegex2 = re.findall(r'\(\(.*\)\)', line)
