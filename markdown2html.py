@@ -38,12 +38,12 @@ if __name__ == "__main__":
                 line = line.replace("__", "</em>", 1)
 
                 # Converting in MD5
-                findRegex = re.findall(r'\[\[(.*)\]\]', line)
-                if findRegex:
+                findRegex = re.findall(r'\[\[(.*?)\]\]', line)
+                for group in range(0, len(findRegex)):
                     line = line.translate({ord(i): None for i in '[]'})
                     if line != "\n":
-                        line = line.replace(findRegex[0],
-                                 md5(findRegex[0].encode()).hexdigest())
+                        md5 = md5(findRegex[group].encode()).hexdigest()
+                        line = line.replace(findRegex[group], md5)
 
                 # Removing '(', ')' 'C', 'c'
                 findRegex2 = re.findall(r'\(\(.*\)\)', line)
@@ -139,7 +139,6 @@ if __name__ == "__main__":
                     if (index[count - 1] == "\n" or line == "\n") and \
                             numberParagraph == 0:
                         continue
-
 
                     # Create paragraph
                     numberParagraph += 1
