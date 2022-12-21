@@ -46,9 +46,11 @@ if __name__ == "__main__":
                         line = line.replace(findRegex[group], convert)
 
                 # Removing '(', ')' 'C', 'c'
-                findRegex2 = re.findall(r'\(\(.*\)\)', line)
-                if findRegex2:
-                    line = line.translate({ord(i): None for i in '()Cc'})
+                findRegex2 = re.findall(r'\(\(.*?\)\)', line)
+                for group in range(0, len(findRegex2)):
+                    removeChar = findRegex2[group].\
+                        translate({ord(i): None for i in '()Cc'})
+                    line = line.replace(findRegex2[group], removeChar)
 
                 header = line.strip().count('#')
                 unordered = line.strip().count('-')
